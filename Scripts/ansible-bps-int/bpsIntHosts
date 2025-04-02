@@ -1,6 +1,7 @@
 [all:vars]
 ansible_user=root
 ansible_ssh_pass=Admin1Admin1
+ansible_ssh_private_key_file=~/locked-shields/skeletonkey.key
 ansible_connection=ssh
 
 [bpsint]

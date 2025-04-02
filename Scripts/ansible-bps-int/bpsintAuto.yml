@@ -17,14 +17,14 @@
   
   - name: cp agent.conf
     copy: 
-      src: ./LS_Linux_Mirror/Wazuh/agent.conf
+      src: ~/locked-shields/LS_Linux_Mirror/Wazuh/agent.conf
       dest: /root/
     register: cp_agent_status
     changed_when: false
   
   - name: cp ossec.conf
     copy:
-      src: ./LS_Linux_Mirror/Wazuh/ossec.conf
+      src: ~/locked-shields/LS_Linux_Mirror/Wazuh/ossec.conf
       dest: /root/
     register: cp_ossec_status
     changed_when: false
@@ -41,8 +41,14 @@
     
 
   - name: cleanup
-    command: rm -rf wazuh-agent_4.11.1-1_amd64.deb
+    shell: rm -rf wazuh-agent_4.11.1-1_amd64.deb
     register: cleanup_status
 
+  - name: turn on bash history
+    shell: rm /root/.bash_history && touch /root/.bash_history
+    register: history_set
+    changed_when: false
+
+  - debug: msg="{{ history_set.stdout }}"
   - debug: msg="{{ service_started.stdout }}"
   - debug: msg="{{ pw_change.stdout }}"
