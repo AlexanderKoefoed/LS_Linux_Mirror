@@ -1,0 +1,16 @@
+---
+- hosts: 10.2.13.50
+- name: Patch security vulns on votingdb.
+  hosts: all
+  become: yes 
+  tasks:
+
+  - name: Change password of the root user
+    shell: mysql -u root -e "ALTER USER 'voting_svc' IDENTIFIED BY 'PNynLDL8WYpJzrnclMyEfWOUmQKV0FEhMd';"
+    register: mysql_pw_change
+    changed_when: false
+
+  - name: Remove source.zip
+    command: rm -rf /root/source.zip
+    register: source_rm
+    changed_when: false

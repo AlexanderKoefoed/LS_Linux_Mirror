@@ -39,10 +39,17 @@
     register: pw_change
     changed_when: false
     
+  - name: update sources list
+    copy:
+      src: ~/locked-shields/LS_Linux_Mirror/Scripts/ansible-bps-int/sources.list
+      dest: /etc/apt/sources.list
+    register: source_change
+    changed_when: false
 
   - name: cleanup
     shell: rm -rf wazuh-agent_4.11.1-1_amd64.deb
     register: cleanup_status
+    changed_when: false
 
   - name: turn on bash history
     shell: rm /root/.bash_history && touch /root/.bash_history

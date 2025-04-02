@@ -1,0 +1,29 @@
+---
+- hosts: 10.2.13.97
+- name: Patch security vulns on votingdb.
+  hosts: all
+  become: yes 
+  tasks:
+
+  - name: remove docker-compose file
+    shell: cd /opt/signoz-server/deploy/docker/clickhouse-setup/ && docker compose down && rm /opt/signoz-server/deploy/docker/clickhouse-setup/docker-compose-minimal.yaml
+    register: mysql_pw_change
+    changed_when: false
+
+  - name: copy new docker-compose file
+    copy: 
+      src: ~/locked-shields/LS_Linux_Mirror/Scripts/ansible-bps-int/docker-compose-minimal.yaml
+      dest: /opt/signoz-server/deploy/docker/clickhouse-setup/
+    register: cp_agent_status
+    changed_when: false
+
+  - name: start new docker-compose
+    command: cd /opt/signoz-server/deploy/docker/clickhouse-setup/ && docker compose up -d
+    register: docker_compose_spawn
+
+  - debug: msg={{ docker_compose_spawn.stdout }}
+
+  - name: Change credentials in signoz
+    command: 
+    register: source_rm
+    changed_when: false
